@@ -1,0 +1,17 @@
+{
+  "name": "youtube-morphe",
+  "appName": "YouTube",
+  "packageName": "com.google.android.youtube",
+  "source": {
+    "provider": "apkmirror",
+    "org": "google-inc",
+    "repo": "youtube",
+    "arch": "universal",
+    "type": "apk",
+    "dpi": "nodpi"
+  },
+  "morphe": {
+    "patchesRepo": "MorpheApp/morphe-patches",
+    "cliRepo": "MorpheApp/morphe-cli"
+  }
+}
