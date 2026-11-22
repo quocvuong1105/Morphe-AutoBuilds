@@ -1,81 +1,8 @@
 {
   "patch_list": [
     {
-      "app_name": "tiktok",
-      "source": "icysymmetra"
-    },
-    {
       "app_name": "youtube",
       "source": "morphe"
     },
-    {
-      "app_name": "youtube-music",
-      "source": "morphe"
-    },
-    {
-      "app_name": "instagram",
-      "source": "piko"
-    },
-    {
-      "app_name": "soundcloud",
-      "source": "Hoo"
-    },
-    {
-      "app_name": "camscanner",
-      "source": "Hoo"
-    },
-    {
-      "app_name": "lightroom",
-      "source": "Hoo"
-    },
-    {
-      "app_name": "google-photos",
-      "source": "akash-photos"
-    },
-
-    {
-      "app_name": "google-news",
-      "source": "Hoo"
-    },
-    {
-      "app_name": "messenger",
-      "source": "hushmessenger"
-    },
-    {
-      "app_name": "proton-vpn",
-      "source": "Hoo"
-    },
-    {
-      "app_name": "rar",
-      "source": "rushiranpise"
-    },
-    {
-      "app_name": "strava",
-      "source": "rushiranpise"
-    },
-    {
-      "app_name": "telegram",
-      "source": "paresh"
-    },
-    {
-      "app_name": "wps-office",
-      "source": "Hoo"
-    },
-    {
-      "app_name": "gboard",
-      "source": "jasonwu1994"
-    },
-    {
-      "app_name": "google-photos",
-      "source": "akash-sriram"
-    },
-    {
-      "app_name": "google-maps",
-      "source": "bearinmindcat"
-    },
-    {
-      "app_name": "facebook",
-      "source": "hushfacebook"
-    }
   ]
 }
