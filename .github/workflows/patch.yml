@@ -4,6 +4,9 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       force_full_rebuild:
@@ -89,7 +92,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FORCE_FULL_REBUILD: ${{ inputs.force_full_rebuild || 'false' }}
+          # A GitHub push should publish a fresh build to GitLab Release.
+          FORCE_FULL_REBUILD: ${{ github.event_name == 'push' && 'true' || inputs.force_full_rebuild || 'false' }}
           # Release state now lives on GitLab: the planner reads manifest.json
           # and the APK list from the GitLab release instead of GitHub's.
           MORPHE_PLATFORM: gitlab
