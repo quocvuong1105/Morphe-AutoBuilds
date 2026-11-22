@@ -179,15 +179,47 @@ def download_package_file(filename: str, dest: str | Path,
 # Releases
 # ---------------------------------------------------------------------------
 
+def _resolve_tag_ref(ref: str) -> str:
+    """Return a ref that actually exists in the GitLab repository."""
+    # The GitHub Actions runner's default branch name (often "main") is not
+    # necessarily present in the separate GitLab mirror project.
+    r = api("GET", f"/repository/branches/{ref}")
+    if r.status_code == 200:
+        return ref
+
+    branches = api("GET", "/repository/branches", params={"per_page": 100})
+    if branches.status_code != 200:
+        raise RuntimeError(
+            f"Could not inspect GitLab repository branches: "
+            f"{branches.status_code} {branches.text[:200]}"
+        )
+    available = branches.json()
+    if not available:
+        raise RuntimeError(
+            "GitLab project repository has no branches/commits. "
+            "Create an initial commit (for example README.md) in GitLab, "
+            "then rerun the workflow. APK package uploads have already succeeded."
+        )
+
+    # Prefer the project's default branch when GitLab marks it; otherwise use
+    # the first existing branch returned by the API.
+    selected = next((b["name"] for b in available if b.get("default")), available[0]["name"])
+    _log.warning(
+        f"GitLab ref '{ref}' does not exist; using existing branch '{selected}' instead"
+    )
+    return selected
+
+
 def move_tag(tag: str, ref: str) -> None:
-    """Point (or create) a tag at ref, deleting the old one first."""
+    """Point (or create) a tag at an existing GitLab repository ref."""
+    resolved_ref = _resolve_tag_ref(ref)
     r = api("DELETE", f"/repository/tags/{tag}")
     if r.status_code not in (200, 204, 404):
         raise RuntimeError(f"Could not delete tag {tag}: {r.status_code} {r.text[:200]}")
-    r = api("POST", "/repository/tags", json={"tag_name": tag, "ref": ref})
+    r = api("POST", "/repository/tags", json={"tag_name": tag, "ref": resolved_ref})
     if r.status_code not in (200, 201):
         raise RuntimeError(f"Could not create tag {tag}: {r.status_code} {r.text[:200]}")
-    _log.info(f"Tag '{tag}' now points at {ref[:8]}")
+    _log.info(f"Tag '{tag}' now points at {resolved_ref[:8]}")
 
 
 def ensure_release(tag: str, name: str, description: str, ref: str) -> Dict[str, Any]:
